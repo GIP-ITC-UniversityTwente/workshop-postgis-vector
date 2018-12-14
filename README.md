@@ -61,7 +61,6 @@ import json                            # Needed only for the first option
 
 import csv                             # Needed only for the second option
 
-myinfo = cbsodata.get_info('83452NED')
 mydata = cbsodata.get_data('83452NED')
 
 #################
@@ -74,7 +73,7 @@ with open('83452NED.json', 'w') as jsonfile:
 # Or into a CSV
 #################
 keys = mydata[0].keys()
-with open('83452NED.csv', 'w') as output_file:
+with open('83452NED.csv', 'w', newline='') as output_file:
     dict_writer = csv.DictWriter(output_file, keys)
     dict_writer.writeheader()
     dict_writer.writerows(mydata)
@@ -137,7 +136,7 @@ Finally, to upload shapefiles into a postgis-enabled postgresql database, the co
 
 ## Experimentation with the data
 
-If your time allows, and you now have two tables in your own database schema, it will be of interest to create a join between them so that the geometric data is connected with the statistical data.  Think about how to do that.  You should aim for a query that brings five pieces of information per municipality: a unique number, the municipal name, the year, and some statsitic of your choice from the first data set.  Test and execute the query until you believe it performs well.  Now assume that the query definition is some SFW code.  Then embed it as follows to define it as a stored view:
+If your time allows, and you now have two tables in your own database schema, it will be of interest to create a join between them so that the geometric data is connected with the statistical data.  Think about how to do that.  You should aim for a query that brings five pieces of information per municipality: a unique number, the municipal name, the year, and some statistic of your choice from the first data set. And also the geometry, of course! Test and execute the query until you believe it performs well.  Now assume that the query definition is some SFW code.  Then embed it as follows to define it as a stored view:
 ```sql
 create or replace view YOURSCHEMA.YOURVIEW as
 SFW;
