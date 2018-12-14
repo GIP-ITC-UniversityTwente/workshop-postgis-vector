@@ -95,7 +95,11 @@ psql -h hostname -p portnumber -d databasename -U username
 ```
 You will now be prompted by psql for a password, and then next see a pure prompt for further commands to be sent to that database on that server.  We will issue only one command which indicates "read my data file and store the data into mytable."  It is done with the psql \COPY statement.  One needs to get used to it, and it is common that your first try will give erors.  Do not give up, read the error message and continue repairing your command until it works.  The arrow-up brings you back to the previous typed out command, so you can quickly repair.
 
-[ A somewhat common problem occurs when your data file holds characters that your computer, or the receiving databse server does not know how to handle.  This is especially common when dat sits on a server with operating system 1, is received by a laptop such as yours with operating system 2, and is then sent to a databse server with operating system 3.  The error reported upon an upload attempt will complain about byte sequence or character encoding. ]
+[ A somewhat common problem occurs when your data file holds characters that your computer, or the receiving database server does not know how to handle.  This is especially common when data sits on a server with operating system 1, is received by a laptop such as yours with operating system 2, and is then sent to a databse server with operating system 3.  The error reported upon an upload attempt will complain about byte sequence or character encoding. In such cases, you need to teel psql which character encoding you are using.  Yo.u will do as first command in your psql session. Typically by stating:
+```os
+\encoding **myEncoding**
+```
+In here, the myEncoding is typically one of : UTF8, LATIN1 or WIN1250. It is typed withotu quotes round it.]
 
 We will not spoil the fun of trying, and want to point out that the full syntax of postgresql's COPY and psql's \COPY command are discussed on the <a href="https://www.postgresql.org/docs/9.6/sql-copy.html">COPY manual page</a>.  The options are shared between COPY and \COPY.  Do understand them and reflect on your study of the contenst of the csv file that was suggested above.
 
