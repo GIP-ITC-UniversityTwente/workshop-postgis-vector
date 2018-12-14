@@ -29,8 +29,11 @@ We have organized a user account for all students on the postgresql server.  Yoi
 **server IP address**: gip.itc.utwente.nl
 
 **port**: 5434
+
 **user**: your s number
+
 **password**: your regular UT password
+
 **database**: c122
 
 ----------
