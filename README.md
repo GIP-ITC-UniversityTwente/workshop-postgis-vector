@@ -126,7 +126,7 @@ ogr2ogr -f "PostgreSQL" PG:"host=gip.itc.utwente.nl dbname=c122 user=yourusernam
 
 **Download from a postgis database into a shapefile**
 ```os
-ogr2ogr -f "ESRI Shapefile" myshapefile.shp PG:"dbname=my_database user=postgres password=mypassword" -sql "SELECT sp_count, geom FROM table WHERE province = 'blablabla'"
+ogr2ogr -f "ESRI Shapefile" myshapefile.shp PG:"host=gip.itc.utwente.nl dbname=c122 user=yourusername password=yourpassword port=5434" -sql "SELECT sp_count, geom FROM table WHERE province = 'blablabla'"
 ```
 Besides the conversion between data/file formats, ogr2ogr can be used for many other operations such as vector projection, clip, extract, filter, and dimension conversion.  Such as 3d to 2d.  Also attribute conversion and many more is possible. For more information, please check the official documentation: <a href="https://www.gdal.org/ogr2ogr.html">ogr2ogr manual page</a>.
 
