@@ -82,12 +82,12 @@ with open('83452NED.csv', 'w', newline='') as output_file:
 ```
 You should now have a data set.  If it is JSON, ogr2ogr as discussed below can help you to load it into your table.  Understand that for such to work you need to indicate names of the database server, database, schema, and table.  Because csv files are another very common data container, we explain how these must be handled for ingestion into a database.  This is probably what you should try out for this first dataset. Here are the steps:
 
-1. think up a proper name for the table that will hold your dataset, and look at the data first to understand which attributes (column) the table has, and which data type is associated with each attribute.
-2. create the table in *YOURSCHEMA*.  This could be done with a sql CREATE TABLE statement, but we suggest here that you use the pgAdmin GUI to create the table and one by one also its attributes.  We advice that you use the same sequence of attributes as the dataset uses.  Decide whether your dataset already has an attribute (or a combination of these) that can function as primary key.  If so, define this while creating the table.  If not so, create an extra attribute, named *dsid* for instance of type *serial*.  This type hands out unique integer numbers to newly created tuples automatically.  Define the primary now when you are still in table creation mode.  If you forgot, open the table properties and define it still.
-3. By now, you should have a data table that has attributes and a primary key defined, but that has no data yet.  For sake of discussion, we will cal it *mytable* here, but understand that is a hopelessly stupid name for a real table.  You ewant to study the contents of the csv file briefly.  Open it, but not in EXCEL!  This software changes your data unknowingly, so better iuse a plain text editor like Notepad or so, to look inside.
+1. think up a proper name for the table that will hold your dataset, and look at the data first to understand which attributes (columns) the table has, and which data type is associated with each attribute.
+2. create the table in *YOURSCHEMA*.  This could be done with a sql CREATE TABLE statement, but we suggest here that you use the pgAdmin GUI to create the table and one by one also its attributes.  We advice that you use the same sequence of attributes as the dataset uses.  Decide whether your dataset already has an attribute (or a combination of these) that can function as primary key.  If so, define this while creating the table.  If not so, create an extra attribute, named *dsid* for instance of type *serial*.  This type hands out unique integer numbers to newly created tuples automatically.  Define the primary key now, when you are still in table creation mode.  If you forgot, open the table properties and define it still.
+3. at this stage, you should have a data table that has attributes and a primary key defined, but that has no data yet.  For sake of discussion, we will call it *mytable* here, but understand that that is a hopelessly stupid name for a real table.  You want to study the contents of the csv file briefly.  Open it, but not in Excel!  This software changes your data unknowingly, so better use a plain text editor like Notepad or so, to look inside.
 
-You want to know a few things now: is there a header line or does the first line already have real data values.  What is the sequence of attributes provided?  Which character (if any) separates different values?  Which character (if any) is used to delineate string values?  Take a note because you will need this info.  If your data holds non-asciss characters, you shoudl also find out which character encoding is used.  (We do not think this is a problem in this exercise, but in general it can be.)
-4. Time to upload the data.  We assume it is in the file *mydataset.csv*.  There is succinct need to understand that the data is on your machine and not on the server machine.  So, we need help to bring it across.  
+You want to know a few things now: is there a header line or does the first line already have real data values.  What is the sequence of attributes provided?  Which character (if any) separates different values?  Which character (if any) is used to quote string values?  Take a note because you will need this information.  If your data holds non-ascii characters, you should also find out which character encoding is used.  (We do not think this is a problem in this exercise, but in general it can be. See bracketed note below.)
+4. Time to upload the data.  We assume it is in the file *mydataset.csv*.  There is a succinct need to understand that the data is on your machine and not on the server machine.  So, we need help to bring it across to the server.  
 
 The commandline tool **psql** does just that: if you call it, you will be prompted to type commands which the tool will execute against a remote server.  For this exercise, you should start up psql in the directory where your data file is, as that is the easiest operation. The typical incantation to start your session can be this:
 ```os
@@ -103,15 +103,15 @@ In here, the myEncoding is a stub and typically is one of : UTF8, LATIN1 or WIN1
 
 We will not otherwise spoil the fun of your trying, and want to point out that the full syntax of postgresql's COPY and psql's \COPY command are discussed on the <a href="https://www.postgresql.org/docs/9.6/sql-copy.html">COPY manual page</a>.  The options are shared between COPY and \COPY.  Do understand them and reflect on your study of the contenst of the csv file that was suggested above.  We advice that you prepare the \COPY statement in a plain text editor, and that you copy the header line from the csv file.
 
-If all has worked, psql will report the number of records created into your table, and prompt for the next thing.  And that next thing can be a simple **\quit**.
+If all has worked, psql will report the number of records created in your table, and prompt for the next thing.  And that next thing can be a simple **\quit**.
 
 ### The case of spatial data
 
-Uploading spatial data is a bit special.  We wont work on raster data in this context, so will not explain that part.  Generally, ogr2ogr is quite capable, and if you run it with "--help" option, it will explain how it works.  Asking for a manual page with a web browser will also do.
+Uploading spatial data is a bit special.  We won't work on raster data in this context, so will not explain that part.  Generally, ogr2ogr is quite capable, and if you run it with the "--help" option, it will explain how it works.  Asking for a manual page with a web browser will also do.
 
-So, **ogr2ogr** is also a command line tool. It converts simple feature data between file formats. Because of the multiple format capability, it is frequently used to load vector files into databases like PostgreSQL or sqlite or, vice versa, from databases into files like shapefiles or geojson.
+So, **ogr2ogr** is also a commandline tool. It converts simple feature data between file formats. Because of the multiple format capability, it is frequently used to load vector files into databases like PostgreSQL or sqlite or, vice versa, from databases into files like shapefiles or geojson.
 
-The tool is part of the GDAL package. Although it also comes with the GDAL Python module, it is in fact a commandline tool and not a Python method.  It should be automatically found by the windows command prompt, so try that. For most of the students it can be found in C:\Program Files\Python37\Lib\site-packages\osgeo\ogr2ogr.exe if it is not found.
+The tool is part of the GDAL package. Although it also comes with the GDAL Python module, it is in fact a commandline tool and not a Python method.  It should be automatically found by the windows command prompt, so try that first. For most of the students, it can be found in C:\Program Files\Python37\Lib\site-packages\osgeo\ogr2ogr.exe if it is not found.
 
 Ogr2ogr has many options for its use; some of the most important ones are:
 
@@ -140,23 +140,23 @@ Besides the conversion between data/file formats, ogr2ogr can be used for many o
 
 
 
-Finally, to upload shapefiles into a postgis-enabled postgresql database, the commandline tool **shape2pgsql** is also available.  We mention it for ist common use and historic perspective.  It is specific to shapefiels in context to PostGIS.  It creates a .sql file that you can subsequently load into your database with a call to psql.  This process is well-documented in the online PostGIS manual, and elsewhere.  Pay attention to the various command options.  The reverse operator is available with pgsql2shape.
+Finally, for sake of completeness, to upload shapefiles into a postgis-enabled postgresql database, the commandline tool **shape2pgsql** is also available.  We mention it because of its common use and historic perspective.  It is specific to shapefiles in combination with PostGIS.  It creates a .sql file that you can subsequently load into your database with a call to psql.  This process is well-documented in the online PostGIS manual, and elsewhere.  Pay attention to the various command options.  The reverse operator is available with pgsql2shape.
 
 ## Experimentation with the data
 
-If your time allows, and you now have two tables in your own database schema, it will be of interest to create a join between them so that the geometric data is connected with the statistical data.  Think about how to do that.  You should aim for a query that brings five pieces of information per municipality: a unique number, the municipal name, the year, and some statistic of your choice from the first data set. And also the geometry, of course! Test and execute the query until you believe it performs well.  Now assume that the query definition is some SFW code.  Then embed it as follows to define it as a stored view:
+If your time allows, and you now have two tables in your own database schema, it will be of interest to create a join between them so that the geometric data is connected with the statistical data.  Think about how to do that.  You should aim for a query that brings five pieces of information per municipality: a unique number, the municipal name, the year, and some statistic from the first data set. And then also the geometry, of course! Test and execute the query until you believe it performs well.  Now assume that the query definition is some SFW code.  Then embed it as follows to define it as a stored view:
 ```sql
 create or replace view YOURSCHEMA.YOURVIEW as
 SFW;
 alter table YOURSCHEMA.YOURVIEW owner to YOURNAME;
 ```
-And finally, load it into a QGIS view for map scrutiny.  Play with the visual variables until you get some decent result.
+Execute that SQL code to really store the view as defined.  Then finally, load it into a QGIS view for map scrutiny.  Play with the visual variables until you get some decent map result.
 
 ----------
 
 ## Working with vector data in the vectors schema
 
-For experimentation with vector data, w ehave already created anorther database with data.  It is discussed below.
+For experimentation with vector data, we have already created another database with data.  It is discussed below.
 
 ----------
 
