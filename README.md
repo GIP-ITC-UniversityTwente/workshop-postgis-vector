@@ -12,7 +12,7 @@ Because PostgreSQL operates in client-server mode, there are client-side softwar
 
 Specifically, you will need to be able to run pgAdmin (a GUI), psql (a commandline tool).  Also, you will need ogr2ogr (a commandline tool), but in normal cirucmstances you already have this tool on your system, as it came with your installation of gdal.
 
-Now, PostGIS is a spatial database library for PostgreSQL.
+Now, PostGIS is a spatial database library for PostgreSQL.  It brings spatial data types and spatial functions, much like you hacve seen for ogr, into the databse platform.  This allows the storage of vector and raster data in postgresql tables, and spatial function calls over such data.
 
 If you explore the database you will notice that the schema public is populated with tables, views and functions.
 
