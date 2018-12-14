@@ -40,9 +40,44 @@ The c122 database very typically has a data schema with the name *public*.  This
 
 Much of the specific exercise data used in the below actually sits in the *vectors* schema.
 
+The exercises below are split in two parts.  One part is about acquiring data and uploading into the database, the other part is about computing with already uploaded vector data.
+
 ----------
 
-## Load data into the database
+## Acquisition of data and loading into the database
+
+This exercise is about acquiring data and mechanisms to upload acquired data into a database.  We will work with two data sources from The Netherlands.  One is the Dutch National Bureau of Statistics, aka CBS, (for plain stats data), the other is the Dutch National Georegistry (for spatial data).  The two data sources connect with each other and would allow some interesting combinatorial experiments.
+
+The first dataset that we have an interest in are statistics per municipality on household garbage amounts.  (As collected by trucks.)  The data that we will obtain indicates for different garbage types the average volume per household per year.  We will take it easy here and suggest you the Python script to obtain this data.  The script actually codes for two ways to do so.  Use only one, and/or try out the other, just to understand how it is done.  Clearly you eventually want to upload into the database only one dataset.
+
+'''python
+import cbsodata                        # install it first!
+import json
+
+import csv
+
+myinfo = cbsodata.get_info('83452NED')
+mydata = cbsodata.get_data('83452NED')
+
+#################
+# Into JSON
+#################
+with open('83452NED.json', 'w') as jsonfile:
+    json.dump(mydata, jsonfile)
+
+#################
+# Or into a CSV
+#################
+keys = mydata[0].keys()
+with open('83452NED.csv', 'w') as output_file:
+    dict_writer = csv.DictWriter(output_file, keys)
+    dict_writer.writeheader()
+    dict_writer.writerows(mydata)
+'''
+
+----------
+
+## Working with vector darta in the public schema
 
 Assuming you are not accessing an already configured version of the database used in this workshop, you will start by creating a new empty database in your system, after which you will create the postgis extension and then import the following shapefiles: *porto_freguesias* ; *ferrovias* and *lugares*
 
