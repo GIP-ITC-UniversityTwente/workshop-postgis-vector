@@ -30,11 +30,14 @@ We have organized a user account for all students on the postgresql server.  Yoi
 
 **port**: 5434
 
-**user**: your s number
+**user**: /your-s-number-with-s/
 
 **password**: your regular UT password
 
 **database**: c122
+
+The c122 database very typically has a data schema with the name *public*.  This is where common data tables and functions are typically held.  Every user has her own schema also.  The normal case also applies here: the personal schema has the name of your account.  You will be able to query any data held anywhere in the database, but when you create a new table, a new view or function, this must be done in your own schema.  Where this applies to examples below, we have used YOURSCHEMA as a template name.
+Much of the specific exercise data used in the below actually sits in the *vectors* schema.
 
 ----------
 
@@ -57,7 +60,7 @@ This workshop assumes a basic knowledge of SQL or *Structured Query Language* wh
 
 ## Explore the database with QGIS DB Manager
 
-Please use your QGIS DB Manager to explore the vectors inside the schema vectors. It is important to know your data before we start analyzing it. Make sure that first you create a connection to the database as explained here: https://www.youtube.com/watch?v=r4pOyVZ3QVs 
+You can view spatial data held in a PostGIS database with QGIS.  Start it up and create a new data layer over a Postgis connection. Use this to explore the vectors inside the schema vectors. It is important to know your data before we start analyzing it. Make sure that first you create a connection to the database as explained here: https://www.youtube.com/watch?v=r4pOyVZ3QVs 
 
 From now on we assume QGIS is your client application.
 
@@ -266,40 +269,6 @@ UPDATE vectors.porto_freguesias
 SET geom=(ST_multi(ST_buffer((ST_makevalid(geom)),0)))
 WHERE NOT ST_IsValid(geom);
 ```
-### Triggers
-
-Triggers execute a given task whenever a specific event occurs in the database. This event can be anything that changes the state of your database - an insertion, a drop, an update. They are extremely useful not only to automate tasks but also to minimize the number of interactions between the users and the database (the source of many errors...). 
-One useful and important example is a trigger that automatically fixes invalid geometries when a new row/feature is added to the table.
-
-**Example 16 - Create a trigger that fixes invalid multipolygon geometries in real time.**
-
-```sql
- -- First lets add function INVALID()
-
-CREATE OR REPLACE FUNCTION invalid()
-  RETURNS trigger AS
-$BODY$
-BEGIN
-	if not st_isValid(NEW.geom) THEN
-	NEW.geom = (ST_multi(ST_buffer((ST_makevalid(NEW.geom)),0))); 
-	RETURN NEW;
- else    
-      RETURN NEW;
-    END IF;
-
-END;
-$BODY$
-  LANGUAGE 'plpgsql' VOLATILE
-  COST 100;
-
--- Now lets add trigger INVALID on our table 
-
-DROP TRIGGER IF EXISTS trg_c_invalid ON vectors.porto_freguesias;
-CREATE TRIGGER trg_c_invalid BEFORE INSERT OR UPDATE
-ON vectors.porto_freguesias FOR EACH ROW EXECUTE PROCEDURE invalid();
-```
-Triggers are very important in production databases, but they can be quite complex. For more information about triggers please check the official documentation:
-[https://www.postgresql.org/docs/current/static/plpgsql-trigger.html](https://www.postgresql.org/docs/current/static/plpgsql-trigger.html)
 
 ----------
 
