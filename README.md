@@ -48,13 +48,16 @@ The exercises below are split in two parts.  One part is about acquiring data an
 
 This exercise is about acquiring data and mechanisms to upload acquired data into a database.  We will work with two data sources from The Netherlands.  One is the Dutch National Bureau of Statistics, aka CBS, (for plain stats data), the other is the Dutch National Georegistry (for spatial data).  The two data sources connect with each other and would allow some interesting combinatorial experiments.
 
-The first dataset that we have an interest in are statistics per municipality on household garbage amounts.  (As collected by trucks.)  The data that we will obtain indicates for different garbage types the average volume per household per year.  We will take it easy here and suggest you the Python script to obtain this data.  The script actually codes for two ways to do so.  Use only one, and/or try out the other, just to understand how it is done.  Clearly you eventually want to upload into the database only one dataset.
+The first dataset that we have an interest in are statistics per municipality on household garbage amounts.  (As collected by trucks.)  The data that we will obtain indicates for different garbage types the average volume per household per year. 
+A description is here, though in Dutch: <a href="https://opendata.cbs.nl/ODataApi/odata/83452NED/TableInfos">table information</a>. Use google translate for some indications.
+
+We will take it easy here and suggest you the Python script to obtain this data.  The script actually codes for two ways to do so.  Use only one, and/or try out the other, just to understand how it is done.  Clearly you eventually want to upload into the database only one dataset.
 
 ```python
-import cbsodata                        # install it first!
-import json
+import cbsodata                        # install it first!  This is a specific CBS-offered package.
+import json                            # Needed only for the first option
 
-import csv
+import csv                             # Needed only for the second option
 
 myinfo = cbsodata.get_info('83452NED')
 mydata = cbsodata.get_data('83452NED')
@@ -74,10 +77,13 @@ with open('83452NED.csv', 'w') as output_file:
     dict_writer.writeheader()
     dict_writer.writerows(mydata)
 ```
+You should now have a data set.  If it is JSON, ogr2ogr as discussed below can help you to load it into your table.  Understand that for such to work you need to indicate names of database server, database, schema, and table for this to work.  Because csv files are another very common data container, we explain to some end how these must be handled for ingestion into a database.  Here are the steps:
+1. think up a proper name for the table that will hold your dataset, and look at the data first to udnerstand which attributes (column) the table has, and which data type is associated with each attribute.
+2. create the table in *YOURSCHEMA*.  This could be done with a sql CREATE TABLE statement, but we suggest here that you use pgAdmin GUI to create the table and one by one also its attributes.  We advice that you use the same sequence of attributes as the dataset uses.  Decide whether your dataset already has an attribute (oir a combination of) that can function as primary key.  If so, define this while creating the table.  If not so, create an extra attribute named *dis* for instance of type *serial*.  This type hands out unique integer numbers to different tuples.
 
 ----------
 
-## Working with vector darta in the public schema
+## Working with vector data in the public schema
 
 Assuming you are not accessing an already configured version of the database used in this workshop, you will start by creating a new empty database in your system, after which you will create the postgis extension and then import the following shapefiles: *porto_freguesias* ; *ferrovias* and *lugares*
 
