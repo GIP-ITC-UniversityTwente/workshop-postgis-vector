@@ -1,25 +1,21 @@
-# **Workshop PostGIS Vector**
+# **C122 Workshop PostGIS Vector**
 
 ### This workshop aims to initialize the user in PostGIS using only vector data.
 
 
 
 ----------
-## Install PostgreSQL and the extension PostGIS
+## Install software tools for using PostgreSQL
 
-PostGIS is a spatial database extender for the database management system (DBMS) PostgreSQL. In order to install PostGIS first we need to install PostgreSQL. You can install PostgreSQL from the official website: [https://www.postgresql.org/download/](https://www.postgresql.org/download/) .
+PostGIS is a spatial database extender for the database management system (DBMS) PostgreSQL. In this exercise, we are providing the server for you, but you will need to install some sofwtare tools on your own machine to be able to connect ot the server.
 
-After the installation of PostgreSQL we need to install PostGIS extension. In windows you can achieve that using Stack Builder.
-Once PostGIS is installed, one can **activate the spatial extension in a new database** with:
-
-```sql
-CREATE EXTENSION POSTGIS;
-```
+Specifically, you will need to be able to run pgAdmin (a GUI), psql (a commandline tool) and shape2pgsql (also a commandline tool).  There is an option to have the third embedded in the first ...  Also, you may need ogr2ogr (a commandline tool), but in normal cirucmstances you already have this tool on your system.
 
 If you explore the database you will notice that the schema public is now populated with new tables, views and functions.
+
 More information about PostGIS instalation can be found at the official documentation: [https://postgis.net/docs/postgis_installation.html](https://postgis.net/docs/postgis_installation.html)
 
-We also recommend a look at PostGIS FAQ:
+We also recommend, in case of problems, to have a look at the PostGIS FAQ:
 [https://postgis.net/docs/PostGIS_FAQ.html](https://postgis.net/docs/PostGIS_FAQ.html)
 
 ----------
@@ -28,7 +24,11 @@ We also recommend a look at PostGIS FAQ:
 
 Assuming you are not accessing an already configured version of the database used in this workshop, you will start by creating a new empty database in your system, after which you will create the postgis extension and then import the following shapefiles: *porto_freguesias* ; *ferrovias* and *lugares*
 
-As an alternative you can restore the *postgis_vectors.backup* database from this repository, this DB already as all the vectors imported.
+As an alternative you can restore the *postgis_vectors.backup* database from this repository, this DB already has all the vectors imported.
+
+Uploading spatial data is a bit special.  We wont work on raster data in this context, so will not explain that part.  Generally, ogr2ogr is quite capable, and if you run it with "--help" option, it will explain how it works.  Asking for a manual page with a web browser will also do.
+
+To upload shapefiles into a postgis-enabled postgresql database, the cmmandline tool shape2pgsql is available.  It creates a *.sql file which you can subsequently load into your database with a call to psql.  This process is well-documented in the online PostGIS manual, and elsewhere.  Pay attention to the various command options.
 
 ----------
 
@@ -81,7 +81,7 @@ WHERE concelho = 'MATOSINHOS';
 
 **Example 3 - Ilike**
 
-The following query will return the same result as the previous one, but by using  ```ilike``` instead of the ```=``` operator the string matching becomes case UNsensitive:
+The following query will return the same result as the previous one, but by using  ```ilike``` instead of the ```=``` operator the string matching becomes case INsensitive:
 
 ```sql 
 SELECT * 
@@ -97,7 +97,7 @@ WHERE concelho LIKE 'Matosinhos';
 ```
 **Example 5 - Selecting attributes in a query**
 
-You may want to have your query returning specific attributes instead of all of them  (the ```*``` sign) as we have been doing. In the example below we are still getting all the parishes that belong to the municipality of Matosinhos, but we are only interested in knowing a few facts (attributes) about them:
+You may want to have your query returning specific attributes instead of all of them  (the ```*``` sign) as we have been doing. In the example below, we are still getting all the parishes that belong to the municipality of Matosinhos, but we are only interested in knowing a few facts (attributes) about them:
 
 ```sql
 SELECT freguesia, area_ha 
@@ -106,14 +106,14 @@ WHERE concelho LIKE 'MATOSINHOS';
 ```
 **Example 6 - Using alias**
 
-Alias are a very common way of expressing a query. An alias consists on renaming a table on the fly as in the example below:
+Aliases are a very common technique in expressing a query. An alias provides another name for a table on the fly as in the example below:
 
 ```sql
 SELECT a.freguesia, a.area_ha 
 FROM  vectors.porto_freguesias AS a
 WHERE a.concelho LIKE 'MATOSINHOS';
 ```
-Note that under the ``` FROM ``` clause we add the ```AS a ```, which is saying that on what this particular query concerns, the table we are calling will be known as 'a' and that is why you see an ```a. ``` prefix whenever the query is referring to rows or attributes that belong to table a. Alias are very useful if your query is calling more than one table as you will soon see. 
+Note that under the ``` FROM ``` clause we add the ```AS a ```, which is saying that on what this particular query concerns, the table we are calling will be known as 'a' and that is why you see an ```a. ``` prefix whenever the query is referring to rows or attributes that belong to table a. Aliases are very useful if your query is calling more than one table as you will soon see. 
 
 ----------
 
@@ -121,7 +121,7 @@ Note that under the ``` FROM ``` clause we add the ```AS a ```, which is saying 
 
 **Example 7 - ST_Area**
 
-Apart from the geometry columns, so far we have only been doing plain PostgreSQL. We will now start to explore some of the spatial functions offered by PostGIS. A PostGIS function usually takes the form ``` NameOfTheFunction(arguments/inputs) ``` Usually spatial function on PostGIS start with **ST_** To demonstrate this principle we will do a simple area calculation. In this example the area will be in meters because the SRID is in meters.:
+Apart from the geometry columns, so far we have only been doing plain PostgreSQL. We will now start to explore some of the spatial functions offered by PostGIS. A PostGIS function usually takes the form ``` NameOfTheFunction(arguments/inputs) ``` Usually a spatial function of PostGIS starts with **ST_**. To demonstrate this principle, we will do a simple area calculation. In this example, the area will be in meters because the SRID uses meter as its unit.:
 
 ```sql
 SELECT a.freguesia, a.area_ha, ST_Area(a.geom)--/10000)::int
@@ -149,11 +149,11 @@ SELECT b.geom, b.id
 FROM vectors.porto_freguesias as a, vectors.ferrovia as b
 WHERE a.concelho ilike 'MATOSINHOS' AND ST_Intersects(a.geom,b.geom);
 ```
-If you load the results in QGIS, the result might no be exactly what you were expecting - you will get the railroad that intersects the parish of Muro but it is not clipped to the boundaries of the parish because this query only applies a logical test, it does not construct a new geometry. In other words, it returns the features that intersect parish of Muro without changing them.
+If you load the results in QGIS, the result might not be exactly what you were expecting - you will get the railroad that intersects the parish of Muro but it is not clipped to the boundaries of the parish because this query only applies a logical test, it does not construct a new geometry. In other words, it returns the features that intersect with the parish of Muro without changing them.
 
 **Example 10 - ST_Intersection**
 
-To get the actual geometry that represents the space shared by two geometries (like a Clip operation), we have to use the **ST_Intersection** function. In this example we will get the railroads that intersect Matosinhos parish.
+To retrieve the actual geometry that represents the space shared by two geometries (like a Clip operation), we have to use the **ST_Intersection** function. In this example, we will get the railroads that intersect Matosinhos parish.
 
 ```sql
 SELECT b.id, ST_Intersection(b.geom, a.geom) as geom
@@ -164,6 +164,8 @@ WHERE a.concelho ilike 'MATOSINHOS' --AND ST_Intersects(a.geom,b.geom);
 Run the above query again, but this time uncomment the ``` AND ST_intersects(a.geom,b.geom); ```  by deleting the ```--``` characters and check the consumed time. 
 When we run the  **ST_Intersection** we should always add the **ST_Intersects** in the were clause, this will make sure we are only computing the intersection were in fact the geometries intersect.
 
+Robustness can be a big concern when computing intersections and other forms of new geometry.  This is especially so when (multi-)polygons are involved as is the case here.  The reason is that resulting geometries may hold any combination of polygons, lines and points, and thus become by type a heterogeneous collection, also known as GeometryCollection.  When you subsequently aim to store the obtained geometry in a table that expects only multipolygons, your database will complain and not allow.  Most of the time, you want to extract only the polygonic part of the result.  This is done by an extra function that is known by the name **ST_CollectionExtract(_, _)**.  Its first parameter is the geometry in question, the second parameter is a geometry type indication: numbers are 1 == POINT, 2 == LINESTRING, 3 == POLYGON.
+
 ----------
 
 
@@ -171,7 +173,7 @@ When we run the  **ST_Intersection** we should always add the **ST_Intersects** 
 
 Time to put together what you have learned so far to solve a spatial problem. 
 
-**Find all the places that are distanced less than 300m from a railroad**
+**Find all the places that are at a distance less than 300 m from a railroad**
 *Hint*: you will have to nest the function ST_Intersects and ST_Buffer under the WHERE clause.
 
 If you manged to solve it, try it with a small variation:
@@ -200,7 +202,7 @@ Example: lets assume the table lugares is changing frequently. If new points are
 
 ### Dealing with invalid geometries
 
-Although not entirely, for the most part PostGIS complies with the OGC Simple Feature Access standard (http://www.opengeospatial.org/standards/sfa), and it is according to this technical recommendation that PostGIS expects to have the geometries. That is not to say that you cannot have invalid geometries in your database, but if you do some of the spatial functions, PostGIS might not work as expected and yield wrong results simply because PostGIS functions assume that your geometries are valid. Therefore you should ALWAYS make sure that your geometries have no errors. The importance of this check is even greater when multiple users are using/editing the same table.
+Although not entirely, for the most part PostGIS complies with the OGC Simple Feature Access standard (http://www.opengeospatial.org/standards/sfa), and it is according to this technical recommendation that PostGIS expects to have the geometries. That is not to say that you cannot have invalid geometries in your database, but if you do some of the spatial functions, PostGIS might not work as expected and yield wrong results simply because PostGIS functions assume that your geometries are valid. Therefore you should ALWAYS make sure that your geometries have no errors. The importance of this check is even bigger when multiple users are using/editing the same table.
 
 Since PostGIS version 2.0 there are functions to detect and repair invalid geometries.
 
@@ -216,7 +218,7 @@ WHERE NOT ST_IsValid(a.geom);
 
 **Example 13 -  Simple approach to fix invalid geometries**
 
-```ST_makevalid``` is the function that returns a corrected geometry. 
+```ST_makevalid``` is the function that returns a corrected geometry.   One needs to be slightly careful with this function: in rare cases it does not resolve the problem and returns a null geometry instead.  That is a valid geometry but not a very useful geometry.  You need to prepare your tests for this.
 
 ```sql
 CREATE TABLE my_freguesias AS
