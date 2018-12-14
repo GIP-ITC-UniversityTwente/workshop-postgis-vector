@@ -143,7 +143,7 @@ create or replace view YOURSCHEMA.YOURVIEW as
 SFW;
 alter table YOURSCHEMA.YOURVIEW owner to YOURNAME;
 ```
-And finally, load it into a QGIS view for map scrutiny.  Play with the visual cariables until you get some decent result.
+And finally, load it into a QGIS view for map scrutiny.  Play with the visual variables until you get some decent result.
 
 ----------
 
