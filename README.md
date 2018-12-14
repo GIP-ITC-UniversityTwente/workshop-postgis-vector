@@ -141,7 +141,7 @@ If your time allows, and you now have two tables in your own database schema, it
 ```sql
 create or replace view YOURSCHEMA.YOURVIEW as
 SFW;
-alter table YOURSCHEMA.YOURNAME owner to YOURNAME;
+alter table YOURSCHEMA.YOURVIEW owner to YOURNAME;
 ```
 And finally, load it into a QGIS view for map scrutiny.  Play with the visual cariables until you get some decent result.
 
