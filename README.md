@@ -121,7 +121,7 @@ Here are some examples of ogr2ogr usage.
 
 **Upload a geojson file into a postgis database**
 ```os
-ogr2ogr -f "PostgreSQL" PG:"dbname=my_database user=postgres password=mypassword" provincial.json -nln destination_table –append
+ogr2ogr -f "PostgreSQL" PG:"host=gip.itc.utwente.nl dbname=c122 user=yourusername password=yourpassword port=5434" provincial.json -nln destination_table –append
 ```
 
 **Download from a postgis database into a shapefile**
