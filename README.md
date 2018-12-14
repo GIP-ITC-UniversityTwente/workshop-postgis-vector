@@ -6,9 +6,9 @@
 ----------
 ## Install software tools for using PostgreSQL
 
-PostgreSQL is a client/server database management system.  It is open source, and can be rapidly installed on most operatingt systems.  In the course, we already have a set up server.  [You are welcome to set up your own server on your own machine, but this is not necessary for this module ... and also we will not support such insrtallation from ourt team.]
+PostgreSQL is a client/server database management system.  It is open source, and can be rapidly installed on most operatingt systems.  In the course, we already have a set up server.  [You are welcome to set up your own server on your own machine, but this is not necessary for this module ... and also we will not support such insrtallation from our team.]
 
-Because PostgreSQL operates in client-server mode, there are client-side software components needed to connect to the server.  Those you should install on your laptop.  Please find a document on these pages that explains how this is done. So,  you will need to install some software tools on your own machine to be able to connect to the server.
+Because PostgreSQL operates in client-server mode, there are client-side software components needed to connect to the server.  Those you should install on your laptop.  Please find a <a href="https://github.com/GIP-ITC-UniversityTwente/workshop-postgis-vector/blob/master/Instructions_Installing_PG_ComandLineTools.docx">support document</a> on these pages that explains how this is done. So,  you will need to install some software tools on your own machine to be able to connect to the server.
 
 Specifically, you will need to be able to run pgAdmin (a GUI), psql (a commandline tool).  Also, you will need ogr2ogr (a commandline tool), but in normal cirucmstances you already have this tool on your system, as it came with your installation of gdal.
 
