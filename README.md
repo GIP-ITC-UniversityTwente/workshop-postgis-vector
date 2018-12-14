@@ -108,39 +108,48 @@ The tool is part of the GDAL package. Although it also comes with the GDAL Pytho
 
 Ogr2ogr has many options for its use; some of the most important ones are:
 
--f : output file format name, some possible values are -f "PostgreSQL" or -f "ESRI Shapefile" or -f "GeoJSON"
+**-f** : output file format name, some possible values are -f "PostgreSQL" or -f "ESRI Shapefile" or -f "GeoJSON"
 
--append : If used, the command appends to existing layer instead of creating a new layer
+**-append** : If used, the command appends to existing layer instead of creating a new layer
 
--update : If used, the command opens existing output datasource in update mode rather than trying to create a new one
+**-update** : If used, the command opens existing output datasource in update mode rather than trying to create a new one
 
--select field_list : Comma-delimited list of fields from input layer to copy to the new layer. Note that this setting cannot be used together with -append. To control the selection of fields when appending to a layer, use -fieldmap or -sql.
+**-select** field_list : Comma-delimited list of fields from input layer to copy to the new layer. Note that this setting cannot be used together with -append. To control the selection of fields when appending to a layer, use -fieldmap or -sql.
 
--sql sql_statement: SQL statement to execute. The resulting table/layer will be saved to the output.
+**-sql** sql_statement: SQL statement to execute. The resulting table/layer will be saved to the output.
 
 Here are some examples of ogr2ogr usage.
 
-**Upload a geojson file into postgis**
+**Upload a geojson file into a postgis database**
 ```os
 ogr2ogr -f "PostgreSQL" PG:"dbname=my_database user=postgres password=mypassword" provincial.json -nln destination_table –append
 ```
 
-**Download from postgis into a shapefile**
+**Download from a postgis database into a shapefile**
 ```os
 ogr2ogr -f "ESRI Shapefile" myshapefile.shp PG:"dbname=my_database user=postgres password=mypassword" -sql "SELECT sp_count, geom FROM table WHERE province = 'blablabla'"
 ```
+Besides the conversion between data/file formats, ogr2ogr can be used for many other operations such as vector projection, clip, extract, filter, and dimension conversion.  Such as 3d to 2d.  Also attribute conversion and many more is possible. For more information, please check the official documentation: <a href="https://www.gdal.org/ogr2ogr.html">ogr2ogr manual page</a>.
 
 
 
-To upload shapefiles into a postgis-enabled postgresql database, the cmmandline tool shape2pgsql is available.  It creates a *.sql file which you can subsequently load into your database with a call to psql.  This process is well-documented in the online PostGIS manual, and elsewhere.  Pay attention to the various command options.
+Finally, to upload shapefiles into a postgis-enabled postgresql database, the commandline tool **shape2pgsql** is also available.  We mention it for ist common use and historic perspective.  It is specific to shapefiels in context to PostGIS.  It creates a .sql file that you can subsequently load into your database with a call to psql.  This process is well-documented in the online PostGIS manual, and elsewhere.  Pay attention to the various command options.  The reverse operator is available with pgsql2shape.
+
+## Experimentation with the data
+
+If your time allows, and you now have two tables in your own database schema, it will be of interest to create a join between them so that the geometric data is connected with the statistical data.  Think about how to do that.  You should aim for a query that brings five pieces of information per municipality: a unique number, the municipal name, the year, and some statsitic of your choice from the first data set.  Test and execute the query until you believe it performs well.  Now assume that the query definition is some SFW code.  Then embed it as follows to define it as a stored view:
+```sql
+create or replace view YOURSCHEMA.YOURVIEW as
+SFW;
+alter table YOURSCHEMA.YOURNAME owner to YOURNAME;
+```
+And finally, load it into a QGIS view for map scrutiny.  Play with the visual cariables until you get some decent result.
 
 ----------
 
 ## Working with vector data in the vectors schema
 
-
-
-
+For experimentation with vector data, w ehave already created anorther database with data.  It is discussed below.
 
 ----------
 
