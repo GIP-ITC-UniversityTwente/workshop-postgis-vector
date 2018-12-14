@@ -82,15 +82,10 @@ You should now have a data set.  If it is JSON, ogr2ogr as discussed below can h
 1. think up a proper name for the table that will hold your dataset, and look at the data first to understand which attributes (column) the table has, and which data type is associated with each attribute.
 2. create the table in *YOURSCHEMA*.  This could be done with a sql CREATE TABLE statement, but we suggest here that you use the pgAdmin GUI to create the table and one by one also its attributes.  We advice that you use the same sequence of attributes as the dataset uses.  Decide whether your dataset already has an attribute (or a combination of these) that can function as primary key.  If so, define this while creating the table.  If not so, create an extra attribute, named *dsid* for instance of type *serial*.  This type hands out unique integer numbers to newly created tuples automatically.  Define the primary now when you are still in table creation mode.  If you forgot, open the table properties and define it still.
 3. By now, you should have a data table that has attributes and a primary key defined, but that has no data yet.  For sake of discussion, we will cal it *mytable* here, but understand that is a hopelessly stupid name for a real table.
-4. Time to upload the data.  We assume it is in the file *mydataset.csv*.
-
-----------
-
-## Working with vector data in the public schema
-
-Assuming you are not accessing an already configured version of the database used in this workshop, you will start by creating a new empty database in your system, after which you will create the postgis extension and then import the following shapefiles: *porto_freguesias* ; *ferrovias* and *lugares*
-
-As an alternative you can restore the *postgis_vectors.backup* database from this repository, this DB already has all the vectors imported.
+4. Time to upload the data.  We assume it is in the file *mydataset.csv*.  There is succint need to understand that the data is on your machine and not on the server machine.  So, we need help to bring it across.  The commandline tool **psql** does just that: if you call it, you will be prompted to type commands which the tool will execute against a remote server.  For this exercise, you should start up psql in the directory where your data file is, as that is the easiest operation.
+```os
+psql -h hostname -p portnumber -d databasename -U username
+```
 
 Uploading spatial data is a bit special.  We wont work on raster data in this context, so will not explain that part.  Generally, ogr2ogr is quite capable, and if you run it with "--help" option, it will explain how it works.  Asking for a manual page with a web browser will also do.
 
@@ -98,6 +93,13 @@ To upload shapefiles into a postgis-enabled postgresql database, the cmmandline 
 
 ----------
 
+## Working with vector data in the vectors schema
+
+
+
+
+
+----------
 
 ## Requirements
 
