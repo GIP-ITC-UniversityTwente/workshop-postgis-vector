@@ -55,6 +55,8 @@ A description is here, though in Dutch: <a href="https://opendata.cbs.nl/ODataAp
 
 We will take it easy here and suggest you the Python script to obtain this data.  The script actually codes for two ways to do so.  Use only one, and/or try out the other, just to understand how it is done.  Clearly you eventually want to upload into the database only one dataset.
 
+[ Incidentally, this exercise makes use of package cbsodata.  It is documented here: https://media.readthedocs.org/pdf/cbsodata/latest/cbsodata.pdf.  Only so you have a reference; there is no immediate need to chase that link. ]
+
 ```python
 import cbsodata                        # install it first!  This is a specific CBS-offered package.
 import json                            # Needed only for the first option
@@ -93,7 +95,9 @@ psql -h hostname -p portnumber -d databasename -U username
 ```
 You will now be prompted by psql for a password, and then next see a pure prompt for further commands to be sent to that database on that server.  We will issue only one command which indicates "read my data file and store the data into mytable."  It is done with the psql \COPY statement.  One needs to get used to it, and it is common that your first try will give erors.  Do not give up, read the error message and continue repairing your command until it works.  The arrow-up brings you back to the previous typed out command, so you can quickly repair.
 
-We will not spoil the fun of trying, and want to point out that the full syntax of postgresql's COPY and psql's \COPY command are discussed on the <a href="https://www.postgresql.org/docs/9.6/sql-copy.html">COPY manual page</a>.  The otpions are shared between COPY and \COPY.  Do understand them and reflect on your study of the contenst of the csv file that was suggested above.
+[ A somewhat common problem occurs when your data file holds characters that your computer, or the receiving databse server does not know how to handle.  This is especially common when dat sits on a server with operating system 1, is received by a laptop such as yours with operating system 2, and is then sent to a databse server with operating system 3.  The error reported upon an upload attempt will complain about byte sequence or character encoding. ]
+
+We will not spoil the fun of trying, and want to point out that the full syntax of postgresql's COPY and psql's \COPY command are discussed on the <a href="https://www.postgresql.org/docs/9.6/sql-copy.html">COPY manual page</a>.  The options are shared between COPY and \COPY.  Do understand them and reflect on your study of the contenst of the csv file that was suggested above.
 
 If all has worked, psql will repot the number of records created into your table, and prompts for the next thing.  And that next thing can be a simple **\quit**.
 
