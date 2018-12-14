@@ -46,6 +46,8 @@ The exercises below are split in two parts.  One part is about acquiring data an
 
 ## Acquisition of data and loading into the database
 
+### The case of plain data
+
 This exercise is about acquiring data and mechanisms to upload acquired data into a database.  We will work with two data sources from The Netherlands.  One is the Dutch National Bureau of Statistics, aka CBS, (for plain stats data), the other is the Dutch National Georegistry (for spatial data).  The two data sources connect with each other and would allow some interesting combinatorial experiments.
 
 The first dataset that we have an interest in are statistics per municipality on household garbage amounts.  (As collected by trucks.)  The data that we will obtain indicates for different garbage types the average volume per household per year. 
@@ -92,7 +94,11 @@ psql -h hostname -p portnumber -d databasename -U username
 ```
 You will now be prompted by psql for a password, and then next see a pure prompt for further commands to be sent to that database on that server.  We will issue only one command which indicates "read my data file and store the data into mytable."  It is done with the psql \COPY statement.  One needs to get used to it, and it is common that your first try will give erors.  Do not give up, read the error message and continue repairing your command until it works.  The arrow-up brings you back to the previous typed out command, so you can quickly repair.
 
-We will not spoil the fun of trying, and want to point out that the full syntax of postgresql's COPY and psql's \COPY command are discussed on the <a href="https://www.postgresql.org/docs/9.6/sql-copy.html">COPY manual page</a>.
+We will not spoil the fun of trying, and want to point out that the full syntax of postgresql's COPY and psql's \COPY command are discussed on the <a href="https://www.postgresql.org/docs/9.6/sql-copy.html">COPY manual page</a>.  The otpions are shared between COPY and \COPY.  Do understand them and reflect on your study of the contenst of the csv file that was suggested above.
+
+If all has worked, psql will repot the number of records created into your table, and prompts for the next thing.  And that next thing can be a simple **\quit**.
+
+### The case of spatial data
 
 Uploading spatial data is a bit special.  We wont work on raster data in this context, so will not explain that part.  Generally, ogr2ogr is quite capable, and if you run it with "--help" option, it will explain how it works.  Asking for a manual page with a web browser will also do.
 
