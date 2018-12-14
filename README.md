@@ -1,19 +1,22 @@
-# **C122 Workshop PostGIS Vector**
+# **C122 Workshop Data acquisition and PostGIS Vector**
 
-### This workshop aims to initialize the user in PostGIS using only vector data.
-
+### This workshop aims to initialize the student in acquiring data from elsewhere and in using PostGIS vector data.
 
 
 ----------
 ## Install software tools for using PostgreSQL
 
-PostGIS is a spatial database extender for the database management system (DBMS) PostgreSQL. In this exercise, we are providing the server for you, but you will need to install some sofwtare tools on your own machine to be able to connect ot the server.
+PostgreSQL is a client/server database management system.  It is open source, and can be rapidly installed on most operatingt systems.  In the course, we already have a set up server.  [You are welcome to set up your own server on your own machine, but this is not necessary for this module ... and also we will not support such insrtallation from ourt team.]
 
-Specifically, you will need to be able to run pgAdmin (a GUI), psql (a commandline tool) and shape2pgsql (also a commandline tool).  There is an option to have the third embedded in the first ...  Also, you may need ogr2ogr (a commandline tool), but in normal cirucmstances you already have this tool on your system.
+Because PostgreSQL operates in client-server mode, there are client-side software components needed to connect to the server.  Those you should install on your laptop.  Please find a document on these pages that explains how this is done. So,  you will need to install some software tools on your own machine to be able to connect to the server.
 
-If you explore the database you will notice that the schema public is now populated with new tables, views and functions.
+Specifically, you will need to be able to run pgAdmin (a GUI), psql (a commandline tool).  Also, you will need ogr2ogr (a commandline tool), but in normal cirucmstances you already have this tool on your system, as it came with your installation of gdal.
 
-More information about PostGIS instalation can be found at the official documentation: [https://postgis.net/docs/postgis_installation.html](https://postgis.net/docs/postgis_installation.html)
+Now, PostGIS is a spatial database library for PostgreSQL.
+
+If you explore the database you will notice that the schema public is populated with tables, views and functions.
+
+More information about PostGIS installation can be found at the official documentation: [https://postgis.net/docs/postgis_installation.html](https://postgis.net/docs/postgis_installation.html)
 
 We also recommend, in case of problems, to have a look at the PostGIS FAQ:
 [https://postgis.net/docs/PostGIS_FAQ.html](https://postgis.net/docs/PostGIS_FAQ.html)
