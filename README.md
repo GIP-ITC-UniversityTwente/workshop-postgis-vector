@@ -102,6 +102,36 @@ If all has worked, psql will repot the number of records created into your table
 
 Uploading spatial data is a bit special.  We wont work on raster data in this context, so will not explain that part.  Generally, ogr2ogr is quite capable, and if you run it with "--help" option, it will explain how it works.  Asking for a manual page with a web browser will also do.
 
+So, **ogr2ogr** is also a command line tool. It converts simple feature data between file formats. Because of the multiple format capability, it is frequently used to load vector files into databases like PostgreSQL or sqlite or, vice versa, from databases into files like shapefiles or geojson.
+
+The tool is part of the GDAL package. Although it also comes with the GDAL Python module, it is in fact a commandline tool and not a Python method.  It should be automatically found by the windows command prompt, so try that. For most of the students it can be found in C:\Program Files\Python37\Lib\site-packages\osgeo\ogr2ogr.exe if it is not found.
+
+Ogr2ogr has many options for its use; some of the most important ones are:
+
+-f : output file format name, some possible values are -f "PostgreSQL" or -f "ESRI Shapefile" or -f "GeoJSON"
+
+-append : If used, the command appends to existing layer instead of creating a new layer
+
+-update : If used, the command opens existing output datasource in update mode rather than trying to create a new one
+
+-select field_list : Comma-delimited list of fields from input layer to copy to the new layer. Note that this setting cannot be used together with -append. To control the selection of fields when appending to a layer, use -fieldmap or -sql.
+
+-sql sql_statement: SQL statement to execute. The resulting table/layer will be saved to the output.
+
+Here are some examples of ogr2ogr usage.
+
+**Upload a geojson file into postgis**
+```os
+ogr2ogr -f "PostgreSQL" PG:"dbname=my_database user=postgres password=mypassword" provincial.json -nln destination_table –append
+```
+
+**Download from postgis into a shapefile**
+```os
+ogr2ogr -f "ESRI Shapefile" myshapefile.shp PG:"dbname=my_database user=postgres password=mypassword" -sql "SELECT sp_count, geom FROM table WHERE province = 'blablabla'"
+```
+
+
+
 To upload shapefiles into a postgis-enabled postgresql database, the cmmandline tool shape2pgsql is available.  It creates a *.sql file which you can subsequently load into your database with a call to psql.  This process is well-documented in the online PostGIS manual, and elsewhere.  Pay attention to the various command options.
 
 ----------
