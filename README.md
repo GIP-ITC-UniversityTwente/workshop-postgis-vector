@@ -25,11 +25,13 @@ We also recommend, in case of problems, to have a look at the PostGIS FAQ:
 ## Your database account
 
 We have organized a user account for all students on the postgresql server.  Yoiu will need its coordinates to work on that server.  Here are the details:
-*server IP: gip.itc.utwente.nl
-port: 5434
-user: your s number
-password: your regular UT password
-database: c122*
+
+**server IP address**: gip.itc.utwente.nl
+
+**port**: 5434
+**user**: your s number
+**password**: your regular UT password
+**database**: c122
 
 ----------
 
