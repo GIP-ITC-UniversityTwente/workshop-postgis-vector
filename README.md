@@ -50,7 +50,7 @@ This exercise is about acquiring data and mechanisms to upload acquired data int
 
 The first dataset that we have an interest in are statistics per municipality on household garbage amounts.  (As collected by trucks.)  The data that we will obtain indicates for different garbage types the average volume per household per year.  We will take it easy here and suggest you the Python script to obtain this data.  The script actually codes for two ways to do so.  Use only one, and/or try out the other, just to understand how it is done.  Clearly you eventually want to upload into the database only one dataset.
 
-'''python
+```python
 import cbsodata                        # install it first!
 import json
 
@@ -73,7 +73,7 @@ with open('83452NED.csv', 'w') as output_file:
     dict_writer = csv.DictWriter(output_file, keys)
     dict_writer.writeheader()
     dict_writer.writerows(mydata)
-'''
+```
 
 ----------
 
