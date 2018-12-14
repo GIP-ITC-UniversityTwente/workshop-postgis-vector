@@ -36,7 +36,8 @@ We have organized a user account for all students on the postgresql server.  Yoi
 
 **database**: c122
 
-The c122 database very typically has a data schema with the name *public*.  This is where common data tables and functions are typically held.  Every user has her own schema also.  The normal case also applies here: the personal schema has the name of your account.  You will be able to query any data held anywhere in the database, but when you create a new table, a new view or function, this must be done in your own schema.  Where this applies to examples below, we have used YOURSCHEMA as a template name.
+The c122 database very typically has a data schema with the name *public*.  This is where common data tables and functions are typically held.  Every user has her own schema also.  The normal case also applies here: the personal schema has the name of your account.  You will be able to query any data held anywhere in the database, but when you create a new table, a new view or function, this must be done in your own schema.  Where this applies to examples below, we have used *YOURSCHEMA* as a template name.
+
 Much of the specific exercise data used in the below actually sits in the *vectors* schema.
 
 ----------
@@ -211,7 +212,7 @@ Views are essentially a stored query, which means you can visualize the result o
 To explore this concept  we will create a view from the solution to the second integration challenge:
 
 ```sql
-CREATE VIEW close2railroad AS
+CREATE VIEW YOURSCHEMA.close2railroad AS
 SELECT a.name, a.geom
 FROM vectors.lugares as a, vectors.ferrovia as b, vectors.porto_freguesias as c
 WHERE st_intersects(a.geom, ST_Buffer(b.geom, 300)) and c.concelho ilike 'MATOSINHOS' and ST_Intersects(a.geom, c.geom);
@@ -242,7 +243,7 @@ WHERE NOT ST_IsValid(a.geom);
 ```ST_makevalid``` is the function that returns a corrected geometry.   One needs to be slightly careful with this function: in rare cases it does not resolve the problem and returns a null geometry instead.  That is a valid geometry but not a very useful geometry.  You need to prepare your tests for this.
 
 ```sql
-CREATE TABLE my_freguesias AS
+CREATE TABLE YOURSCHEMA.my_freguesias AS
 SELECT id, name, ST_buffer((ST_makevalid(geom)),0)) as geom
 FROM vectors.porto_freguesias
 WHERE NOT ST_IsValid(geom);
@@ -253,8 +254,8 @@ WHERE NOT ST_IsValid(geom);
 Although the previous example works well most of the times, in some cases polygons or multipolygons ```ST_makeValid``` might return points or lines. A solution for this is to use a buffer of 0 meters: 
 
 ```sql
-DROP TABLE IF EXISTS my_freguesias;
-CREATE TABLE my_freguesias AS
+DROP TABLE IF EXISTS YOURSCHEMA.my_freguesias;
+CREATE TABLE YOURSCHEMA.my_freguesias AS
 SELECT id, name, ST_buffer((ST_makevalid(geom)),0)) as geom
 FROM vectors.porto_freguesias
 WHERE NOT ST_IsValid(geom);
