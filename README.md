@@ -30,7 +30,7 @@ We have organized a user account for all students on the postgresql server.  Yoi
 
 **port**: 5434
 
-**user**: /your-s-number-with-s/
+**user**: *your-s-number-with-s*
 
 **password**: your regular UT password
 
