@@ -58,22 +58,27 @@ We will take it easy here and suggest you the Python script to obtain this data.
 [ Incidentally, this exercise makes use of package cbsodata.  It is documented here: https://media.readthedocs.org/pdf/cbsodata/latest/cbsodata.pdf.  Only so you have a reference; there is no immediate need to chase that link. ]
 
 ```python
+import requests                        # install it first!  This is a a package that allows to access the web.
 import cbsodata                        # install it first!  This is a specific CBS-offered package.
 import json                            # Needed only for the first option
 
 import csv                             # Needed only for the second option
 
+#########################################
+# Collect provincial geojson from PDOK
+#########################################
+
+url = 'https://geodata.nationaalgeoregister.nl/bestuurlijkegrenzen/wfs?request=GetFeature&service=wfs&outputFormat=json&typename=bestuurlijkegrenzen:gemeenten'
+response = requests.request('GET', url)
+jsonObj = json.loads(response.text) # convert text response into a dictionary
+
+with open('provincial.json', 'w') as jsonfile:
+    json.dump(jsonObj, jsonfile)
+
+#######################################
+# Collect CBS data into a CSV
+#######################################
 mydata = cbsodata.get_data('83452NED')
-
-#################
-# Into JSON
-#################
-with open('83452NED.json', 'w') as jsonfile:
-    json.dump(mydata, jsonfile)
-
-#################
-# Or into a CSV
-#################
 keys = mydata[0].keys()
 with open('83452NED.csv', 'w', newline='') as output_file:
     dict_writer = csv.DictWriter(output_file, keys)
