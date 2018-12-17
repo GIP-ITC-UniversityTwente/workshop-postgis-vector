@@ -6,17 +6,17 @@
 ----------
 ## Install software tools for using PostgreSQL
 
-PostgreSQL is a client/server database management system.  It is open source, and can be rapidly installed on most operatingt systems.  In the course, we already have a set up server.  [You are welcome to set up your own server on your own machine, but this is not necessary for this module ... and also we will not support such insrtallation from our team.]
+PostgreSQL is a client/server database management system.  It is open source, and can be rapidly installed on most operating systems.  In the course, we already have a set up a server.  [ You are welcome to set up your own server on your own machine, but this is not necessary for this module ... and also we will not support such insrtallation from our team. ]
 
 Because PostgreSQL operates in client-server mode, there are client-side software components needed to connect to the server.  Those you should install on your laptop.  Please find a <a href="https://github.com/GIP-ITC-UniversityTwente/workshop-postgis-vector/blob/master/Instructions_Installing_PG_ComandLineTools.docx">support document</a> on these pages that explains how this is done. So,  you will need to install some software tools on your own machine to be able to connect to the server.
 
 Specifically, you will need to be able to run pgAdmin (a GUI), psql (a commandline tool).  Also, you will need ogr2ogr (a commandline tool), but in normal cirucmstances you already have this tool on your system, as it came with your installation of gdal.
 
-Now, PostGIS is a spatial database library for PostgreSQL.  It brings spatial data types and spatial functions, much like you hacve seen for ogr, into the databse platform.  This allows the storage of vector and raster data in postgresql tables, and spatial function calls over such data.
+Now, PostGIS is a spatial database library for PostgreSQL.  It brings spatial data types and spatial functions, much like you have seen for ogr, into the database platform.  This allows the storage of vector and raster data in postgresql tables, and spatial function calls over such data.
 
 If you explore the database you will notice that the schema public is populated with tables, views and functions.
 
-More information about PostGIS installation can be found at the official documentation: [https://postgis.net/docs/postgis_installation.html](https://postgis.net/docs/postgis_installation.html)
+More information about PostGIS installation can be found in the official documentation: [https://postgis.net/docs/postgis_installation.html](https://postgis.net/docs/postgis_installation.html)
 
 We also recommend, in case of problems, to have a look at the PostGIS FAQ:
 [https://postgis.net/docs/PostGIS_FAQ.html](https://postgis.net/docs/PostGIS_FAQ.html)
@@ -24,7 +24,7 @@ We also recommend, in case of problems, to have a look at the PostGIS FAQ:
 ----------
 ## Your database account
 
-We have organized a user account for all students on the postgresql server.  Yoiu will need its coordinates to work on that server.  Here are the details:
+We have organized a user account for all students on the postgresql server.  You will need its coordinates to work on that server.  Here are the details:
 
 **server IP address**: gip.itc.utwente.nl
 
@@ -36,7 +36,7 @@ We have organized a user account for all students on the postgresql server.  Yoi
 
 **database**: c122
 
-The c122 database very typically has a data schema with the name *public*.  This is where common data tables and functions are typically held.  Every user has her own schema also.  The normal case also applies here: the personal schema has the name of your account.  You will be able to query any data held anywhere in the database, but when you create a new table, a new view or function, this must be done in your own schema.  Where this applies to examples below, we have used *YOURSCHEMA* as a template name.
+The c122 database very typically has a data schema with the name *public*.  This is where common data tables and functions are typically held.  Every user has her own schema also.  The normal case also applies here: the personal schema has the name of your account.  You will be able to query any data held anywhere in the database, as long as the owner has granted rights, but when you create a new table, a new view or function, this must be done in your own schema.  Where this applies to examples below, we have used *YOURSCHEMA* as a template name.
 
 Much of the specific exercise data used in the below actually sits in the *vectors* schema.
 
@@ -50,10 +50,10 @@ The exercises below are split in two parts.  One part is about acquiring data an
 
 This exercise is about acquiring data and mechanisms to upload acquired data into a database.  We will work with two data sources from The Netherlands.  One is the Dutch National Bureau of Statistics, aka CBS, (for plain stats data), the other is the Dutch National Georegistry (for spatial data).  The two data sources connect with each other and would allow some interesting combinatorial experiments.
 
-The first dataset that we have an interest in are statistics per municipality on household garbage amounts.  (As collected by trucks.)  The data that we will obtain indicates for different garbage types the average volume per household per year. 
+The first dataset that we have an interest in are statistics per municipality on household garbage amounts.  (As collected by garbage pick-up trucks.)  The data that we will obtain indicates for different garbage types the average volume per household per year. 
 A description is here, though in Dutch: <a href="https://opendata.cbs.nl/ODataApi/odata/83452NED/TableInfos">table information</a>. Use google translate for some indications.
 
-We will take it easy here and suggest you the Python script to obtain this data.  The script actually codes for two ways to do so.  Use only one, and/or try out the other, just to understand how it is done.  Clearly you eventually want to upload into the database only one dataset.
+We will take it easy here and suggest you the Python script to obtain this data.
 
 [ Incidentally, this exercise makes use of package cbsodata.  It is documented here: https://media.readthedocs.org/pdf/cbsodata/latest/cbsodata.pdf.  Only so you have a reference; there is no immediate need to chase that link. ]
 
@@ -87,7 +87,7 @@ with open('83452NED.csv', 'w', newline='') as output_file:
     dict_writer.writeheader()
     dict_writer.writerows(mydata)
 ```
-You should now have a data set.  In the caso of the geoJSON, ogr2ogr as discussed below can help you to load it into your table.  Understand that for such to work you need to indicate names of the database server, database, schema, and table.  Because csv files are another very common data container, we explain how these must be handled for ingestion into a database.  This is probably what you should try out for this first dataset. Here are the steps:
+You should now have a data set.  In the case it is geoJSON, ogr2ogr as discussed below, can help you to load it into your table.  Understand that for such to work you need to indicate names of the database server, database, schema, and table.  Because csv files are another very common data container, we explain how these must be handled for ingestion into a database.  This is probably what you should try out for this first dataset. Here are the steps:
 
 1. think up a proper name for the table that will hold your dataset, and look at the data first to understand which attributes (columns) the table has, and which data type is associated with each attribute.
 2. create the table in *YOURSCHEMA*.  This could be done with a sql CREATE TABLE statement, but we suggest here that you use the pgAdmin GUI to create the table and one by one also its attributes.  We advice that you use the same sequence of attributes as the dataset uses.  Decide whether your dataset already has an attribute (or a combination of these) that can function as primary key.  If so, define this while creating the table.  If not so, create an extra attribute, named *dsid* for instance of type *serial*.  This type hands out unique integer numbers to newly created tuples automatically.  Define the primary key now, when you are still in table creation mode.  If you forgot, open the table properties and define it still.
