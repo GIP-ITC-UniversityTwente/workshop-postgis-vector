@@ -58,8 +58,10 @@ We will take it easy here and suggest you the Python script to obtain this data.
 [ Incidentally, this exercise makes use of package cbsodata.  It is documented here: https://media.readthedocs.org/pdf/cbsodata/latest/cbsodata.pdf.  Only so you have a reference; there is no immediate need to chase that link. ]
 
 ```python
-import requests                        # install it first!  This is a a package that allows to access the web.
-import cbsodata                        # install it first!  This is a specific CBS-offered package.
+import requests                        # install it first!  
+                                       # This is a a package that allows to access the web.
+import cbsodata                        # install it first! 
+                                       # This is a specific CBS-offered package.
 import json                            # Needed only for the first option
 
 import csv                             # Needed only for the second option
