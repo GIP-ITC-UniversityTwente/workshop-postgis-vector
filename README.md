@@ -378,7 +378,7 @@ WHERE NOT ST_IsValid(geom);
 Because ST_buffer returns a single polygon geometry, if we have a table of multipolygons we need to apply **ST_multi** function. This function transforms any single geometry into a MULTI* geometry. In this example, instead of creating a new table we will replace the invalid polygons by valid ones, using an UPDATE TABLE.
 
 ```sql
-UPDATE vectors.porto_freguesias
+UPDATE YOURSCHEMA.my_freguesias
 SET geom=(ST_multi(ST_buffer((ST_makevalid(geom)),0)))
 WHERE NOT ST_IsValid(geom);
 ```
