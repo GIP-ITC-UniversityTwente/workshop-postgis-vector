@@ -66,9 +66,9 @@ import json                            # Needed only for the first option
 
 import csv                             # Needed only for the second option
 
-#########################################
-# Collect provincial geojson from PDOK
-#########################################
+##############################################
+# Collect provincial data as geojson from PDOK
+##############################################
 
 url = 'https://geodata.nationaalgeoregister.nl/bestuurlijkegrenzen/wfs?request=GetFeature&service=wfs&outputFormat=json&typename=bestuurlijkegrenzen:gemeenten'
 response = requests.request('GET', url)
@@ -77,9 +77,9 @@ jsonObj = json.loads(response.text) # convert text response into a dictionary
 with open('provincial.json', 'w') as jsonfile:
     json.dump(jsonObj, jsonfile)
 
-#######################################
+##############################################
 # Collect CBS data into a CSV
-#######################################
+##############################################
 mydata = cbsodata.get_data('83452NED')
 keys = mydata[0].keys()
 with open('83452NED.csv', 'w', newline='') as output_file:
