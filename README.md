@@ -62,7 +62,7 @@ import requests                        # install it first!
                                        # This is a a package that allows to access the web.
 import cbsodata                        # install it first! 
                                        # This is a specific CBS-offered package.
-import json                            # Needed when json fortmat is involved
+import json                            # Needed when json format is involved
 
 import csv                             # Needed when csv format is involved
 
