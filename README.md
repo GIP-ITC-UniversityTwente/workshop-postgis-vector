@@ -62,9 +62,9 @@ import requests                        # install it first!
                                        # This is a a package that allows to access the web.
 import cbsodata                        # install it first! 
                                        # This is a specific CBS-offered package.
-import json                            # Needed only for the first option
+import json                            # Needed only for the first option of getting csv data
 
-import csv                             # Needed only for the second option
+import csv                             # Needed only for the second option of getting csv data
 
 ##############################################
 # Collect provincial data as geojson from PDOK
