@@ -62,13 +62,13 @@ import requests                        # install it first!
                                        # This is a a package that allows to access the web.
 import cbsodata                        # install it first! 
                                        # This is a specific CBS-offered package.
-import json                            # Needed only for the first option of getting csv data
+import json                            # Needed when json fortmat is involved
 
-import csv                             # Needed only for the second option of getting csv data
+import csv                             # Needed when csv format is involved
 
-##############################################
-# Collect provincial data as geojson from PDOK
-##############################################
+#####################################################################
+# Collect provincial data as geojson from Dutch Nationaal Georegister
+#####################################################################
 
 url = 'https://geodata.nationaalgeoregister.nl/bestuurlijkegrenzen/wfs?request=GetFeature&service=wfs&outputFormat=json&typename=bestuurlijkegrenzen:gemeenten'
 response = requests.request('GET', url)
